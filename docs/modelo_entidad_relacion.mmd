@@ -1,0 +1,32 @@
+erDiagram
+    BRANDS ||--o{ DEVICES : "tiene"
+    DEVICES ||--o{ COMMENTS : "recibe"
+
+    BRANDS {
+        BIGINT id PK
+        VARCHAR name UK
+    }
+
+    DEVICES {
+        BIGINT id PK
+        BIGINT brand_id FK
+        VARCHAR name
+        VARCHAR type
+        DATE release_date
+        VARCHAR processor
+        VARCHAR memory
+        VARCHAR storage
+        VARCHAR screen
+        VARCHAR description
+        VARCHAR image_url
+        NUMERIC price
+    }
+
+    COMMENTS {
+        BIGINT id PK
+        BIGINT device_id FK
+        VARCHAR author
+        VARCHAR content
+        INTEGER rating
+        TIMESTAMP created_at
+    }
