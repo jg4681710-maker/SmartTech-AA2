@@ -4,3 +4,73 @@ body { background: #f6f8fb; color: #172033; }
 .product-card:hover { transform: translateY(-3px); box-shadow: 0 1rem 2rem rgba(0,0,0,.10) !important; }
 .product-image { height: 230px; object-fit: cover; background: #e9edf5; }
 .detail-image { max-height: 520px; width: 100%; object-fit: cover; }
+
+/* =========================================================
+   ADMINISTRACIÓN
+   Navegación uniforme
+   ========================================================= */
+
+.admin-navbar {
+    min-height: 64px;
+}
+
+.admin-navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.admin-navbar .navbar-brand {
+    margin-right: 24px;
+    white-space: nowrap;
+}
+
+.admin-nav-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.admin-nav-btn {
+    min-width: 96px;
+    height: 38px;
+    padding: 0 14px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    white-space: nowrap;
+}
+
+.admin-nav-btn-wide {
+    min-width: 150px;
+}
+
+.admin-nav-btn-logout {
+    min-width: 118px;
+}
+
+.admin-logout-form {
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+/* =========================================================
+   ADMINISTRACIÓN
+   Acciones de las tablas
+   ========================================================= */
+
+.admin-table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-table-actions .btn {
+    white-space: nowrap;
+}

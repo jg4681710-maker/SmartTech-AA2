@@ -1,107 +1,42 @@
 # SmartTech - AA2
 
-Proyecto académico para la actividad **Creando con patrón de arquitectura** de Desarrollo de Software Web Back-end.
+Proyecto académico desarrollado para la actividad **“Creación de CRUD para tablas de base de datos”** de la asignatura Desarrollo de Software Web Back-end.
 
-## Tecnologías
-- Java 17 o superior compatible
-- Spring Boot 3
-- Spring MVC
-- Thymeleaf
-- Spring Data JPA
-- PostgreSQL
-- Bootstrap 5
-- Maven
-- Visual Studio Code
+SmartTech es una aplicación web orientada a la consulta y administración de dispositivos tecnológicos. El sistema permite visualizar un catálogo de dispositivos, realizar búsquedas y filtros, consultar información detallada, registrar comentarios y calificaciones, y administrar la información mediante un módulo administrativo protegido.
 
-## Funcionalidades implementadas
-1. Catálogo de dispositivos.
-2. Ordenamiento por fecha de lanzamiento.
-3. Búsqueda por nombre.
-4. Filtro por marca.
-5. Filtro por tipo.
-6. Vista de detalle.
-7. Sistema de comentarios y calificación.
-8. Administración de marcas.
-9. Administración CRUD de dispositivos.
-10. Persistencia mediante PostgreSQL.
-11. Arquitectura por capas.
+## Funcionalidades
 
-## Requisitos
-- JDK 23
-- Maven 3.9+
-- PostgreSQL 15+ recomendado
+### Sitio público
 
-## Base de datos
+- Consulta de dispositivos tecnológicos.
+- Búsqueda por nombre.
+- Filtrado por marca.
+- Filtrado por tipo de dispositivo.
+- Ordenamiento por fecha de lanzamiento.
+- Visualización del detalle de cada dispositivo.
+- Consulta de comentarios y calificaciones.
+- Registro de comentarios.
 
-La aplicación utiliza PostgreSQL y trabaja con una base de datos denominada `smarttech_db`.
+### Módulo administrativo
 
-La configuración de conexión se encuentra en `application.properties`.
+- Inicio de sesión mediante nombre de usuario o correo electrónico.
+- Autenticación mediante contraseña.
+- Protección de las rutas administrativas.
+- Gestión de dispositivos.
+- Gestión de marcas.
+- Gestión de tipos de dispositivos.
+- Gestión de autores.
+- Gestión de comentarios.
+- Operaciones CRUD de creación, consulta, actualización y eliminación.
+- Cierre de sesión.
 
-### Modelo de datos
+### API REST
 
-La base de datos está compuesta por las tablas:
+- Consulta de dispositivos en formato JSON.
+- Consulta de dispositivos en formato XML.
 
-- `brands`
-- `devices`
-- `comments`
+Endpoints:
 
-Las relaciones principales son:
-
-- Una marca puede tener varios dispositivos.
-- Un dispositivo pertenece a una marca.
-- Un dispositivo puede tener varios comentarios.
-- Cada comentario pertenece a un dispositivo.
-
-### Scripts de base de datos
-
-Dentro de la carpeta `database` se encuentran:
-
-- `01_schema.sql`: creación de la estructura de la base de datos.
-- `02_seed.sql`: inserción de datos iniciales.
-- `03_backup_smarttech_db.sql`: script de respaldo/restauración de la base de datos.
-
-### Archivos de respaldo y documentación
-
-Dentro de la carpeta `BD` se encuentran:
-
-- `Modelo_Entidad_Relacion_SmartTech.pdf`: modelo entidad-relación de la base de datos.
-- `smarttech_db_backup.backup`: respaldo de la base de datos PostgreSQL en formato Custom.
-
-El respaldo `smarttech_db_backup.backup` puede restaurarse mediante la opción **Restore** de pgAdmin sobre la base de datos `smarttech_db`.
-
-## Ejecución
-
-Desde la carpeta raíz del proyecto ejecutar:
-
-```bash
-mvn clean spring-boot:run
-```
-
-Abrir:
-
-`http://localhost:8080`
-
-### Administración
-
-Gestión de dispositivos:
-
-`http://localhost:8080/admin/devices`
-
-Gestión de marcas:
-
-`http://localhost:8080/admin/brands`
-
-## Evidencias recomendadas
-Tomar capturas donde se vea:
-- estructura de carpetas por capas;
-- ejecución del proyecto;
-- catálogo con filtros;
-- detalle de un dispositivo;
-- registro de comentario;
-- administración de dispositivos;
-- administración de marcas;
-- PostgreSQL con tablas y datos;
-- modelo entidad-relación.
-
-## Observación académica
-La aplicación es un prototipo funcional y académico. Para una versión productiva se recomienda agregar autenticación, autorización por roles, manejo global de excepciones, DTOs, paginación, protección CSRF y validaciones adicionales.
+```text
+http://localhost:8080/api/devices/json
+http://localhost:8080/api/devices/xml

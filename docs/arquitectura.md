@@ -1,38 +1,90 @@
 # Arquitectura por capas - SmartTech
 
-El proyecto utiliza una arquitectura por capas, apropiada para separar responsabilidades y preparar la solución para un Back-end mantenible.
+El proyecto utiliza una arquitectura por capas basada en el patrón MVC,
+con separación de responsabilidades entre la presentación, los
+controladores, la lógica de negocio, el acceso a datos y la persistencia
+en PostgreSQL.
+
+La solución también incorpora Spring Security para la autenticación y
+protección del módulo administrativo, y un controlador REST para
+exponer información en formatos JSON y XML.
+
 
 ```text
-                 ┌───────────────────────────┐
-                 │       Presentación         │
-                 │ Thymeleaf + Bootstrap      │
-                 └─────────────┬─────────────┘
-                               │ HTTP
-                 ┌─────────────▼─────────────┐
-                 │       Controllers          │
-                 │ Home / Device / Brand      │
-                 └─────────────┬─────────────┘
-                               │
-                 ┌─────────────▼─────────────┐
-                 │         Services           │
-                 │ reglas y casos de uso      │
-                 └─────────────┬─────────────┘
-                               │
-                 ┌─────────────▼─────────────┐
-                 │       Repositories         │
-                 │ Spring Data JPA            │
-                 └─────────────┬─────────────┘
-                               │
-                 ┌─────────────▼─────────────┐
-                 │          PostgreSQL        │
-                 └───────────────────────────┘
-```
+                    ┌──────────────────────────────┐
+                    │       PRESENTACIÓN           │
+                    │   Thymeleaf + Bootstrap      │
+                    │        HTML + CSS            │
+                    └──────────────┬───────────────┘
+                                   │ HTTP
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │         CONTROLLERS          │
+                    │                              │
+                    │ HomeController               │
+                    │ DeviceController             │
+                    │ BrandController              │
+                    │ CommentController            │
+                    │ DeviceTypeController         │
+                    │ AuthorController             │
+                    │ LoginController              │
+                    └──────────────┬───────────────┘
+                                   │
+                    ┌──────────────▼───────────────┐
+                    │          SERVICES            │
+                    │                              │
+                    │ Lógica de negocio            │
+                    │ Validaciones y operaciones   │
+                    │ CRUD                         │
+                    └──────────────┬───────────────┘
+                                   │
+                    ┌──────────────▼───────────────┐
+                    │         REPOSITORIES         │
+                    │                              │
+                    │ Spring Data JPA              │
+                    │ Acceso a datos               │
+                    └──────────────┬───────────────┘
+                                   │
+                    ┌──────────────▼───────────────┐
+                    │          ENTITIES            │
+                    │                              │
+                    │ Device / Brand               │
+                    │ DeviceType / Comment         │
+                    │ Author / AdminUser           │
+                    └──────────────┬───────────────┘
+                                   │
+                    ┌──────────────▼───────────────┐
+                    │          PostgreSQL          │
+                    │                              │
+                    │ devices                      │
+                    │ brands                       │
+                    │ device_types                 │
+                    │ comments                     │
+                    │ authors                      │
+                    │ admin_users                  │
+                    └──────────────────────────────┘
 
-## Justificación
-- **Controller:** recibe peticiones HTTP y coordina la respuesta.
-- **Service:** encapsula la lógica de negocio.
-- **Repository:** abstrae el acceso a datos.
-- **Entity:** representa las tablas y relaciones.
-- **Templates/Static:** contienen la capa de presentación.
 
-Esta separación facilita posteriormente exponer una API REST, implementar autenticación/autorización y desplegar el Back-end en un servidor remoto.
+                    ┌──────────────────────────────┐
+                    │       SPRING SECURITY        │
+                    │                              │
+                    │ Autenticación                │
+                    │ Usuario o correo             │
+                    │ BCrypt                       │
+                    │ Rol ADMIN                    │
+                    │ Protección /admin/**         │
+                    └──────────────────────────────┘
+
+
+                    ┌──────────────────────────────┐
+                    │           API REST           │
+                    │                              │
+                    │     DeviceRestController     │
+                    │              │               │
+                    │              ▼               │
+                    │        DeviceResponse        │
+                    │              │               │
+                    │         ┌────┴────┐          │
+                    │         ▼         ▼          │
+                    │       JSON       XML         │
+                    └──────────────────────────────┘

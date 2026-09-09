@@ -8,6 +8,7 @@ import java.util.List;
 
 @Service
 public class DeviceService {
+
     private final DeviceRepository repository;
 
     public DeviceService(DeviceRepository repository) {
@@ -15,12 +16,33 @@ public class DeviceService {
     }
 
     public List<Device> search(String keyword, Long brandId, String type) {
-        String cleanKeyword = (keyword == null || keyword.isBlank()) ? null : keyword.trim();
-        String cleanType = (type == null || type.isBlank()) ? null : type;
-        return repository.search(cleanKeyword, brandId, cleanType);
+        String cleanKeyword =
+                (keyword == null || keyword.isBlank())
+                        ? null
+                        : keyword.trim();
+
+        String cleanType =
+                (type == null || type.isBlank())
+                        ? null
+                        : type.trim();
+
+        return repository.search(
+                cleanKeyword,
+                brandId,
+                cleanType
+        );
     }
 
-    public Device findById(Long id) { return repository.findById(id).orElseThrow(); }
-    public Device save(Device device) { return repository.save(device); }
-    public void delete(Long id) { repository.deleteById(id); }
+    public Device findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow();
+    }
+
+    public Device save(Device device) {
+        return repository.save(device);
+    }
+
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }

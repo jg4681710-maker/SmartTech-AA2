@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Administración | SmartTech</title>
+    <title>Comentarios | SmartTech</title>
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -27,14 +27,14 @@
 
         <div class="admin-nav-actions">
 
+            <a th:href="@{/admin/devices}"
+               class="btn btn-outline-light admin-nav-btn">
+                Dispositivos
+            </a>
+
             <a th:href="@{/admin/brands}"
                class="btn btn-outline-light admin-nav-btn">
                 Marcas
-            </a>
-
-            <a th:href="@{/admin/comments}"
-               class="btn btn-outline-light admin-nav-btn">
-                Comentarios
             </a>
 
             <a th:href="@{/admin/device-types}"
@@ -45,11 +45,6 @@
             <a th:href="@{/admin/authors}"
                class="btn btn-outline-light admin-nav-btn">
                 Autores
-            </a>
-
-            <a th:href="@{/admin/devices/new}"
-               class="btn btn-primary admin-nav-btn admin-nav-btn-wide">
-                Nuevo dispositivo
             </a>
 
             <form th:action="@{/logout}"
@@ -71,22 +66,33 @@
 
 <main class="container py-4">
 
-    <h1 class="mb-4">
-        Gestión de dispositivos
-    </h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h1 class="mb-0">
+            Gestión de comentarios
+        </h1>
+
+        <a th:href="@{/admin/devices}"
+           class="btn btn-secondary">
+            Volver
+        </a>
+
+    </div>
+
 
     <div class="table-responsive">
 
-        <table class="table table-hover align-middle">
+        <table class="table table-bordered table-hover align-middle">
 
-            <thead>
+            <thead class="table-dark">
 
                 <tr>
-                    <th>Nombre</th>
-                    <th>Marca</th>
-                    <th>Tipo</th>
-                    <th>Lanzamiento</th>
-                    <th>Precio</th>
+                    <th>ID</th>
+                    <th>Autor</th>
+                    <th>Comentario</th>
+                    <th>Calificación</th>
+                    <th>Dispositivo</th>
+                    <th>Fecha</th>
                     <th>Acciones</th>
                 </tr>
 
@@ -94,35 +100,38 @@
 
             <tbody>
 
-                <tr th:each="device : ${devices}">
+                <tr th:each="comment : ${comments}">
 
-                    <td th:text="${device.name}">
+                    <td th:text="${comment.id}">
                     </td>
 
-                    <td th:text="${device.brand.name}">
+                    <td th:text="${comment.author.name}">
                     </td>
 
-                    <td th:text="${device.type.name}">
+                    <td th:text="${comment.content}">
                     </td>
 
-                    <td th:text="${device.releaseDate}">
+                    <td th:text="${comment.rating}">
                     </td>
 
-                    <td th:text="${device.price}">
+                    <td th:text="${comment.device.name}">
+                    </td>
+
+                    <td th:text="${comment.createdAt}">
                     </td>
 
                     <td>
 
                         <div class="admin-table-actions">
 
-                            <a th:href="@{/admin/devices/edit/{id}(id=${device.id})}"
+                            <a th:href="@{/admin/comments/edit/{id}(id=${comment.id})}"
                                class="btn btn-outline-primary btn-sm">
                                 Editar
                             </a>
 
-                            <a th:href="@{/admin/devices/delete/{id}(id=${device.id})}"
+                            <a th:href="@{/admin/comments/delete/{id}(id=${comment.id})}"
                                class="btn btn-outline-danger btn-sm"
-                               onclick="return confirm('¿Desea eliminar este dispositivo?');">
+                               onclick="return confirm('¿Desea eliminar este comentario?');">
                                 Eliminar
                             </a>
 

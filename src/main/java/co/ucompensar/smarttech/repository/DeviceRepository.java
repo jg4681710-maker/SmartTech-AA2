@@ -9,13 +9,18 @@ import java.util.List;
 
 public interface DeviceRepository extends JpaRepository<Device, Long> {
 
-    @Query("select d from Device d join fetch d.brand b " +
+    @Query("select d from Device d " +
+           "join fetch d.brand b " +
+           "join fetch d.type dt " +
            "where (:keyword is null or " +
            "lower(d.name) like lower(concat('%', cast(:keyword as String), '%'))) " +
            "and (:brandId is null or b.id = :brandId) " +
-           "and (:type is null or d.type = :type) " +
+           "and (:type is null or dt.name = :type) " +
            "order by d.releaseDate desc")
-    List<Device> search(@Param("keyword") String keyword,
-                        @Param("brandId") Long brandId,
-                        @Param("type") String type);
+    List<Device> search(
+            @Param("keyword") String keyword,
+            @Param("brandId") Long brandId,
+            @Param("type") String type);
+
+    boolean existsByTypeId(Long typeId);
 }

@@ -8,16 +8,33 @@ import java.util.List;
 
 @Service
 public class CommentService {
+
     private final CommentRepository repository;
 
     public CommentService(CommentRepository repository) {
         this.repository = repository;
     }
 
+    public List<Comment> findAll() {
+        return repository.findAll();
+    }
+
     public List<Comment> findByDevice(Long deviceId) {
         return repository.findByDeviceIdOrderByCreatedAtDesc(deviceId);
     }
 
-    public Comment save(Comment comment) { return repository.save(comment); }
-    public void delete(Long id) { repository.deleteById(id); }
+    public Comment findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Comentario no encontrado: " + id
+                ));
+    }
+
+    public Comment save(Comment comment) {
+        return repository.save(comment);
+    }
+
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }

@@ -11,12 +11,21 @@ import org.springframework.web.bind.annotation.*;
 public class BrandController {
     private final BrandService service;
 
-    public BrandController(BrandService service) { this.service = service; }
+    public BrandController(BrandService service) { 
+        this.service = service; 
+    }
 
     @GetMapping
     public String list(Model model) {
         model.addAttribute("brands", service.findAll());
         model.addAttribute("brand", new Brand());
+        return "admin-brands";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Long id, Model model) {
+        model.addAttribute("brand", service.findById(id));
+        model.addAttribute("brands", service.findAll());
         return "admin-brands";
     }
 

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Editar comentario | SmartTech</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container">
+
+        <a class="navbar-brand"
+           th:href="@{/admin/devices}">
+            SmartTech · Administración
+        </a>
+
+        <form th:action="@{/logout}"
+              method="post"
+              class="d-inline">
+
+            <button type="submit"
+                    class="btn btn-outline-light btn-sm">
+                Cerrar sesión
+            </button>
+
+        </form>
+
+    </div>
+
+</nav>
+
+<main class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h1 class="h3 mb-0">
+            Editar comentario
+        </h1>
+
+        <a th:href="@{/admin/comments}"
+           class="btn btn-secondary">
+            Volver
+        </a>
+
+    </div>
+
+    <form th:action="@{/admin/comments/save}"
+          th:object="${comment}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+        <!-- AUTOR -->
+        <div class="mb-3">
+
+            <label for="author"
+                   class="form-label">
+                Autor
+            </label>
+
+            <select id="author"
+                    class="form-select"
+                    th:field="*{author.id}"
+                    required>
+
+                <option value="">
+                    Seleccione un autor
+                </option>
+
+                <option th:each="author : ${authors}"
+                        th:value="${author.id}"
+                        th:text="${author.name}">
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- COMENTARIO -->
+        <div class="mb-3">
+
+            <label for="content"
+                   class="form-label">
+                Comentario
+            </label>
+
+            <textarea id="content"
+                      class="form-control"
+                      th:field="*{content}"
+                      rows="4"
+                      required></textarea>
+
+        </div>
+
+        <!-- CALIFICACIÓN -->
+        <div class="mb-3">
+
+            <label for="rating"
+                   class="form-label">
+                Calificación
+            </label>
+
+            <input type="number"
+                   id="rating"
+                   class="form-control"
+                   th:field="*{rating}"
+                   min="1"
+                   max="5"
+                   required>
+
+        </div>
+
+        <!-- DISPOSITIVO -->
+        <div class="mb-4">
+
+            <label for="device"
+                   class="form-label">
+                Dispositivo
+            </label>
+
+            <select id="device"
+                    class="form-select"
+                    th:field="*{device.id}"
+                    required>
+
+                <option value="">
+                    Seleccione un dispositivo
+                </option>
+
+                <option th:each="device : ${devices}"
+                        th:value="${device.id}"
+                        th:text="${device.name}">
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- BOTONES -->
+        <button type="submit"
+                class="btn btn-primary">
+            Guardar cambios
+        </button>
+
+        <a th:href="@{/admin/comments}"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+
+    </form>
+
+</main>
+
+</body>
+
+</html>

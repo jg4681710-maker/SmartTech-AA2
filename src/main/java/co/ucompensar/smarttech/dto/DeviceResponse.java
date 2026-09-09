@@ -1,66 +1,52 @@
-package co.ucompensar.smarttech.entity;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+package co.ucompensar.smarttech.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "devices")
-public class Device {
+public class DeviceResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank
-    @Column(nullable = false, length = 140)
     private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "brand_id", nullable = false)
-    private Brand brand;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "type_id", nullable = false)
-    private DeviceType type;
-
-    @NotNull
-    @Column(name = "release_date", nullable = false)
+    private String brand;
+    private String type;
     private LocalDate releaseDate;
-
-    @NotBlank
-    @Column(nullable = false, length = 120)
     private String processor;
-
-    @NotBlank
-    @Column(nullable = false, length = 120)
     private String memory;
-
-    @NotBlank
-    @Column(nullable = false, length = 120)
     private String storage;
-
-    @NotBlank
-    @Column(nullable = false, length = 80)
     private String screen;
-
-    @NotBlank
-    @Column(nullable = false, length = 1000)
     private String description;
-
-    @NotBlank
-    @Column(nullable = false, length = 255)
     private String imageUrl;
-
-    @NotNull
-    @DecimalMin("0.0")
-    @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
 
-    public Device() {
+    public DeviceResponse() {
+    }
+
+    public DeviceResponse(
+            Long id,
+            String name,
+            String brand,
+            String type,
+            LocalDate releaseDate,
+            String processor,
+            String memory,
+            String storage,
+            String screen,
+            String description,
+            String imageUrl,
+            BigDecimal price) {
+
+        this.id = id;
+        this.name = name;
+        this.brand = brand;
+        this.type = type;
+        this.releaseDate = releaseDate;
+        this.processor = processor;
+        this.memory = memory;
+        this.storage = storage;
+        this.screen = screen;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.price = price;
     }
 
     public Long getId() {
@@ -79,19 +65,19 @@ public class Device {
         this.name = name;
     }
 
-    public Brand getBrand() {
+    public String getBrand() {
         return brand;
     }
 
-    public void setBrand(Brand brand) {
+    public void setBrand(String brand) {
         this.brand = brand;
     }
 
-    public DeviceType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(DeviceType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

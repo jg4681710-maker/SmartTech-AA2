@@ -1,17 +1,25 @@
 erDiagram
+
     BRANDS ||--o{ DEVICES : "tiene"
+    DEVICE_TYPES ||--o{ DEVICES : "clasifica"
     DEVICES ||--o{ COMMENTS : "recibe"
+    AUTHORS ||--o{ COMMENTS : "realiza"
 
     BRANDS {
         BIGINT id PK
         VARCHAR name UK
     }
 
+    DEVICE_TYPES {
+        BIGINT id PK
+        VARCHAR name UK
+    }
+
     DEVICES {
         BIGINT id PK
-        BIGINT brand_id FK
         VARCHAR name
-        VARCHAR type
+        BIGINT brand_id FK
+        BIGINT type_id FK
         DATE release_date
         VARCHAR processor
         VARCHAR memory
@@ -22,11 +30,24 @@ erDiagram
         NUMERIC price
     }
 
+    AUTHORS {
+        BIGINT id PK
+        VARCHAR name UK
+    }
+
     COMMENTS {
         BIGINT id PK
         BIGINT device_id FK
-        VARCHAR author
+        BIGINT author_id FK
         VARCHAR content
         INTEGER rating
         TIMESTAMP created_at
+    }
+
+    ADMIN_USERS {
+        BIGINT id PK
+        VARCHAR username UK
+        VARCHAR email UK
+        VARCHAR password
+        BOOLEAN enabled
     }
