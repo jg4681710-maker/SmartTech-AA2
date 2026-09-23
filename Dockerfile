@@ -12,4 +12,4 @@ RUN mvn clean package -DskipTests
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "java -jar target/smarttech-1.0.0.jar"]
+CMD ["sh", "-c", "java -Xms128m -Xmx384m -jar target/smarttech-1.0.0.jar"]
