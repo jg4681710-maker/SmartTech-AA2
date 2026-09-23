@@ -17,15 +17,20 @@ public class AdminUserInitializer {
 
         return args -> {
 
-            String username = System.getenv("SMARTTECH_ADMIN_USERNAME");
-            String email = System.getenv("SMARTTECH_ADMIN_EMAIL");
-            String password = System.getenv("SMARTTECH_ADMIN_PASSWORD");
+            String username = getEnvironmentVariable(
+                    "SMARTTECH_ADMIN_USERNAME",
+                    "admin"
+            );
 
-            if (username == null || email == null || password == null) {
-                throw new IllegalStateException(
-                        "Faltan las variables de entorno del administrador."
-                );
-            }
+            String email = getEnvironmentVariable(
+                    "SMARTTECH_ADMIN_EMAIL",
+                    "admin@smarttech.com"
+            );
+
+            String password = getEnvironmentVariable(
+                    "SMARTTECH_ADMIN_PASSWORD",
+                    "SmartTechAdmin123"
+            );
 
             AdminUser adminUser = repository
                     .findByUsername(username)
@@ -51,5 +56,18 @@ public class AdminUserInitializer {
                     "Administrador verificado correctamente."
             );
         };
+    }
+
+    private String getEnvironmentVariable(
+            String variableName,
+            String defaultValue) {
+
+        String value = System.getenv(variableName);
+
+        if (value == null || value.isBlank()) {
+            return defaultValue;
+        }
+
+        return value;
     }
 }
