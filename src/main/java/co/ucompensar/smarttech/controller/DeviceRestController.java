@@ -1,12 +1,13 @@
 package co.ucompensar.smarttech.controller;
 
+import co.ucompensar.smarttech.dto.DeviceRequest;
 import co.ucompensar.smarttech.dto.DeviceResponse;
-import co.ucompensar.smarttech.entity.Device;
 import co.ucompensar.smarttech.service.DeviceService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,41 +22,77 @@ public class DeviceRestController {
     }
 
     @GetMapping(
-            value = "/json",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<DeviceResponse> getDevicesJson() {
-        return getDeviceResponses();
+    public ResponseEntity<List<DeviceResponse>> findAll() {
+        return ResponseEntity.ok(
+                deviceService.findAll()
+        );
     }
 
     @GetMapping(
-            value = "/xml",
-            produces = MediaType.APPLICATION_XML_VALUE
+            value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<DeviceResponse> getDevicesXml() {
-        return getDeviceResponses();
+    public ResponseEntity<DeviceResponse> findById(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                deviceService.findByIdOrThrow(id)
+        );
     }
 
-    private List<DeviceResponse> getDeviceResponses() {
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<DeviceResponse> create(
+            @Valid @RequestBody DeviceRequest request) {
 
-        List<Device> devices =
-                deviceService.search(null, null, null);
+        DeviceResponse response =
+                deviceService.create(request);
 
-        return devices.stream()
-                .map(device -> new DeviceResponse(
-                        device.getId(),
-                        device.getName(),
-                        device.getBrand().getName(),
-                        device.getType().getName(),
-                        device.getReleaseDate(),
-                        device.getProcessor(),
-                        device.getMemory(),
-                        device.getStorage(),
-                        device.getScreen(),
-                        device.getDescription(),
-                        device.getImageUrl(),
-                        device.getPrice()
-                ))
-                .toList();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<DeviceResponse> update(
+            @PathVariable Long id,
+            @Valid @RequestBody DeviceRequest request) {
+
+        DeviceResponse response =
+                deviceService.update(id, request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id) {
+
+        deviceService.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    /*
+     * Endpoint conservado de la actividad anterior.
+     * Permite consultar los dispositivos en JSON.
+     */
+    @GetMapping(
+            value = "/json",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<DeviceResponse>> getDevicesJson() {
+
+        return ResponseEntity.ok(
+                deviceService.findAll()
+        );
     }
 }

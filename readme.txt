@@ -1,417 +1,247 @@
-SMARTTECH - BACK-END CRUD
-Actividad AA2 - Creación de CRUD para tablas de base de datos
-
+SMARTTECH - API REST
+Actividad AA2 - Creación API REST para transferir información entre base de datos
 
 1. DESCRIPCIÓN DEL PROYECTO
 
 SmartTech es una aplicación web para la consulta y administración de
 dispositivos tecnológicos. El proyecto integra un Back-end desarrollado
 con Java y Spring Boot, una base de datos PostgreSQL y un Front-end
-desarrollado con Thymeleaf y Bootstrap.
+desarrollado con Thymeleaf.
 
-El sistema permite consultar públicamente los dispositivos tecnológicos
-y administrar la información mediante un módulo protegido de
-administración.
+Para la presente actividad se implementó una API REST que permite
+transferir información entre la aplicación y la base de datos mediante
+solicitudes HTTP y respuestas en formato JSON.
 
-La aplicación implementa una arquitectura por capas basada en MVC,
-persistencia mediante Spring Data JPA, autenticación mediante Spring
-Security y exposición de información mediante formatos JSON y XML.
+La API REST permite realizar operaciones de consulta, creación,
+actualización y eliminación de dispositivos tecnológicos mediante los
+métodos HTTP GET, POST, PUT y DELETE.
 
+Las pruebas de funcionamiento fueron realizadas utilizando Postman.
 
-2. FUNCIONALIDADES PRINCIPALES
+2. OBJETIVO DE LA API REST
 
+La API REST tiene como objetivo proporcionar una interfaz para consultar
+y administrar la información de los dispositivos almacenados en la base
+de datos PostgreSQL.
 
-SITIO PÚBLICO
+La implementación permite:
 
-- Consulta de dispositivos tecnológicos.
-- Búsqueda por nombre.
-- Filtrado por marca.
-- Filtrado por tipo de dispositivo.
-- Ordenamiento por fecha de lanzamiento.
-- Visualización del detalle de cada dispositivo.
-- Consulta de comentarios y calificaciones.
-- Registro de comentarios sobre los dispositivos.
+* Consultar todos los dispositivos.
+* Consultar un dispositivo mediante su identificador.
+* Crear nuevos dispositivos.
+* Actualizar dispositivos existentes.
+* Eliminar dispositivos.
+* Verificar mediante respuestas HTTP cuando un recurso no existe.
 
+Las respuestas de la API utilizan el formato JSON.
 
-MÓDULO ADMINISTRATIVO
+3. ENDPOINTS DE LA API REST
 
-- Inicio de sesión mediante nombre de usuario o correo electrónico y
-  contraseña.
-- Protección de las rutas administrativas.
-- Gestión de dispositivos.
-- Gestión de marcas.
-- Gestión de tipos de dispositivos.
-- Gestión de autores.
-- Gestión de comentarios.
-- Crear, consultar, actualizar y eliminar registros.
-- Cierre de sesión.
+CONSULTAR TODOS LOS DISPOSITIVOS
 
+Método:
+GET
 
-FORMATOS DE DATOS
+Endpoint:
+http://localhost:8080/api/devices
 
-- API REST para consulta de dispositivos en formato JSON.
-- API REST para consulta de dispositivos en formato XML.
+Descripción:
+Retorna la lista de dispositivos registrados en la base de datos.
 
+Respuesta esperada:
+HTTP 200 OK
 
-RECURSOS GRÁFICOS
+CONSULTAR UN DISPOSITIVO
 
-Las imágenes de los dispositivos se cargan mediante URLs externas
-almacenadas en el campo imageUrl de la base de datos. El Front-end
-utiliza este valor para mostrar dinámicamente la imagen correspondiente
-a cada dispositivo.
+Método:
+GET
 
-Esta implementación permite mantener las referencias de las imágenes
-asociadas a los registros de la base de datos sin almacenar copias
-locales dentro del proyecto.
+Endpoint:
+http://localhost:8080/api/devices/{id}
 
+Ejemplo:
+http://localhost:8080/api/devices/1
 
-Endpoints:
+Descripción:
+Retorna la información de un dispositivo específico mediante su
+identificador.
 
-http://localhost:8080/api/devices/json
+Respuesta esperada:
+HTTP 200 OK
 
-http://localhost:8080/api/devices/xml
+CREAR UN DISPOSITIVO
 
+Método:
+POST
 
-3. ARQUITECTURA
+Endpoint:
+http://localhost:8080/api/devices
 
-El proyecto utiliza una arquitectura por capas basada en el patrón MVC.
+Content-Type:
+application/json
+
+Descripción:
+Permite registrar un nuevo dispositivo mediante un objeto JSON.
+
+Respuesta esperada:
+HTTP 201 Created
+
+ACTUALIZAR UN DISPOSITIVO
+
+Método:
+PUT
+
+Endpoint:
+http://localhost:8080/api/devices/{id}
+
+Ejemplo:
+http://localhost:8080/api/devices/5
+
+Content-Type:
+application/json
+
+Descripción:
+Permite actualizar la información de un dispositivo existente.
+
+Respuesta esperada:
+HTTP 200 OK
+
+ELIMINAR UN DISPOSITIVO
+
+Método:
+DELETE
+
+Endpoint:
+http://localhost:8080/api/devices/{id}
+
+Ejemplo:
+http://localhost:8080/api/devices/8
+
+Descripción:
+Permite eliminar un dispositivo existente mediante su identificador.
+
+Respuesta esperada:
+HTTP 204 No Content
+
+VERIFICACIÓN DE ELIMINACIÓN
+
+Después de realizar la operación DELETE se puede consultar nuevamente
+el identificador eliminado mediante GET.
+
+Si el dispositivo ya no existe, la API responde:
+
+HTTP 404 Not Found
+
+Ejemplo de respuesta:
+
+{
+"timestamp": "2026-09-22T16:18:57.7767533",
+"status": 404,
+"error": "Not Found",
+"message": "No se encontró el dispositivo con ID: 8",
+"path": "/api/devices/8"
+}
+
+4. EJEMPLO DE ESTRUCTURA JSON
+
+Los dispositivos son transferidos mediante objetos JSON.
+
+Ejemplo de respuesta:
+
+{
+"id": 1,
+"name": "Galaxy S25",
+"brand": "Samsung",
+"type": "Celular",
+"releaseDate": "2025-01-22",
+"processor": "Snapdragon 8 Elite",
+"memory": "12 GB RAM",
+"storage": "256 GB",
+"screen": "6.2 pulgadas AMOLED",
+"description": "Celular de alto rendimiento orientado a productividad, fotografía y entretenimiento.",
+"imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80",
+"price": 3299000.00
+}
+
+5. EJEMPLO DE SOLICITUD POST
+
+Para registrar un dispositivo se envía información en formato JSON.
+
+Ejemplo:
+
+{
+"name": "Galaxy A56",
+"brandId": 1,
+"typeId": 1,
+"releaseDate": "2025-03-28",
+"processor": "Exynos 1580",
+"memory": "8 GB RAM",
+"storage": "256 GB",
+"screen": "6.7 pulgadas AMOLED",
+"description": "Smartphone de gama media alta diseñado para rendimiento, productividad y entretenimiento.",
+"imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80",
+"price": 2199000
+}
+
+6. ARQUITECTURA
+
+El proyecto utiliza una arquitectura por capas basada en Spring Boot.
 
 Flujo general:
 
-Controller
-    ↓
+Cliente HTTP / Postman
+|
+v
+REST Controller
+|
+v
 Service
-    ↓
+|
+v
 Repository
-    ↓
+|
+v
+Entity
+|
+v
 PostgreSQL
 
+COMPONENTES PRINCIPALES
 
-Componentes principales:
+Entity:
+Representa las entidades utilizadas para la persistencia de información
+en la base de datos.
 
-- Entity: representa las entidades de la base de datos.
-- Repository: permite el acceso y persistencia de datos.
-- Service: contiene la lógica de negocio.
-- Controller: gestiona las solicitudes HTTP y las vistas.
-- REST Controller: expone información mediante JSON y XML.
-- DTO: controla la información entregada por la API REST.
-- Security: gestiona la autenticación y protección del módulo
-  administrativo.
-- Templates: contiene las vistas HTML desarrolladas con Thymeleaf.
-- CSS: contiene los estilos utilizados por el sitio.
+Repository:
+Permite realizar el acceso a los datos mediante Spring Data JPA.
 
+Service:
+Contiene la lógica de negocio y las operaciones CRUD utilizadas por la
+API.
 
-4. TABLAS DE LA BASE DE DATOS
+REST Controller:
+Recibe las solicitudes HTTP y expone los endpoints de la API REST.
 
-La aplicación utiliza las siguientes tablas principales:
+DTO:
+Permite controlar la información recibida y enviada por la API.
 
-- devices: almacena los dispositivos tecnológicos.
-- brands: almacena las marcas de los dispositivos.
-- device_types: almacena el catálogo normalizado de tipos de
-  dispositivos.
-- comments: almacena los comentarios y calificaciones.
-- authors: almacena el catálogo normalizado de autores de comentarios.
-- admin_users: almacena los usuarios autorizados para acceder al
-  módulo administrativo.
+Security:
+Gestiona la configuración de seguridad de la aplicación y permite
+autorizar las solicitudes utilizadas por la API REST.
 
+Postman:
+Se utilizó para realizar las pruebas de los endpoints REST.
 
-RELACIONES PRINCIPALES
+7. ESTRUCTURA PRINCIPAL DEL PROYECTO
 
-- devices.brand_id → brands.id
-- devices.type_id → device_types.id
-- comments.device_id → devices.id
-- comments.author_id → authors.id
-
-
-NORMALIZACIÓN
-
-Para mejorar la estructura de la base de datos se normalizaron los
-campos que anteriormente almacenaban directamente el tipo de dispositivo
-y el autor del comentario.
-
-El campo type de la tabla devices fue reemplazado por la relación
-type_id con la tabla device_types.
-
-El campo author de la tabla comments fue reemplazado por la relación
-author_id con la tabla authors.
-
-De esta manera, los tipos de dispositivos y los autores se administran
-como catálogos independientes y se relacionan mediante claves foráneas.
-
-
-5. CRUD
-
-DISPOSITIVOS
-
-- Create: creación de dispositivos desde el módulo administrativo.
-- Read: consulta de dispositivos.
-- Update: edición de dispositivos.
-- Delete: eliminación de dispositivos.
-
-
-MARCAS
-
-- Create: creación de marcas.
-- Read: consulta de marcas.
-- Update: edición de marcas.
-- Delete: eliminación de marcas.
-
-
-TIPOS DE DISPOSITIVOS
-
-- Create: creación de tipos de dispositivos.
-- Read: consulta de tipos de dispositivos.
-- Update: edición de tipos de dispositivos.
-- Delete: eliminación de tipos de dispositivos.
-
-
-AUTORES
-
-- Create: creación de autores.
-- Read: consulta de autores.
-- Update: edición de autores.
-- Delete: eliminación de autores.
-
-
-COMENTARIOS
-
-- Create: registro de comentarios desde el sitio público.
-- Read: consulta de comentarios.
-- Update: edición administrativa.
-- Delete: eliminación administrativa.
-
-
-6. SEGURIDAD
-
-El acceso al módulo administrativo se encuentra protegido mediante
-Spring Security.
-
-El administrador puede autenticarse utilizando:
-
-- Nombre de usuario.
-- Correo electrónico.
-- Contraseña.
-
-Las contraseñas se almacenan utilizando BCrypt.
-
-Las rutas administrativas requieren autenticación y el rol ADMIN.
-
-El sistema también permite cerrar la sesión y restringe el acceso
-directo a las rutas administrativas cuando el usuario no se encuentra
-autenticado.
-
-Por seguridad, las credenciales utilizadas durante las pruebas no se
-almacenan en este archivo. Para configurar el usuario administrador se
-utilizan variables de entorno.
-
-
-Variables utilizadas:
-
-SMARTTECH_ADMIN_USERNAME
-SMARTTECH_ADMIN_EMAIL
-SMARTTECH_ADMIN_PASSWORD
-
-
-7. TECNOLOGÍAS UTILIZADAS
-
-Lenguaje:
-
-- Java 17
-
-
-Framework:
-
-- Spring Boot 3.5.4
-- Spring MVC
-- Spring Security
-- Spring Data JPA
-
-
-Persistencia:
-
-- PostgreSQL
-
-
-Motor de plantillas:
-
-- Thymeleaf
-
-
-Interfaz:
-
-- HTML5
-- CSS3
-- Bootstrap 5.3.3
-
-
-Formatos:
-
-- JSON
-- XML
-
-
-Gestión del proyecto:
-
-- Maven
-
-
-Entorno de desarrollo:
-
-- Visual Studio Code
-
-
-Administración de base de datos:
-
-- pgAdmin
-
-
-8. REQUISITOS PARA EJECUTAR EL PROYECTO
-
-Se requiere tener instalado:
-
-- Java JDK 17 o superior.
-- PostgreSQL.
-- Visual Studio Code u otro IDE compatible.
-
-El proyecto incluye Maven Wrapper, por lo que no es obligatorio tener
-Maven instalado de forma independiente.
-
-
-9. CONFIGURACIÓN DE LA BASE DE DATOS
-
-Crear una base de datos PostgreSQL denominada:
-
-smarttech_db
-
-
-La aplicación utiliza las siguientes variables de entorno para
-conectarse a PostgreSQL:
-
-PGHOST
-PGPORT
-PGDATABASE
-PGUSER
-PGPASSWORD
-
-
-Ejemplo de configuración local:
-
-PGHOST=localhost
-PGPORT=5432
-PGDATABASE=smarttech_db
-PGUSER=postgres
-
-
-La variable PGPASSWORD debe contener la contraseña local configurada para
-el usuario de PostgreSQL.
-
-
-Los archivos SQL incluidos en la carpeta database permiten crear,
-cargar y actualizar la estructura de la base de datos.
-
-
-10. CONFIGURACIÓN DEL ADMINISTRADOR
-
-También deben configurarse las variables:
-
-SMARTTECH_ADMIN_USERNAME
-SMARTTECH_ADMIN_EMAIL
-SMARTTECH_ADMIN_PASSWORD
-
-
-La aplicación crea o verifica automáticamente el usuario administrador
-al iniciar.
-
-La contraseña del administrador es almacenada de forma segura mediante
-BCrypt.
-
-
-11. EJECUCIÓN
-
-Desde la carpeta raíz del proyecto ejecutar:
-
-
-Windows:
-
-.\mvnw.cmd spring-boot:run
-
-
-La aplicación estará disponible en:
-
-http://localhost:8080
-
-
-12. RUTAS PRINCIPALES
-
-SITIO PÚBLICO:
-
-http://localhost:8080/
-
-
-DETALLE DE DISPOSITIVO:
-
-http://localhost:8080/devices/{id}
-
-
-MÓDULO ADMINISTRATIVO:
-
-http://localhost:8080/admin/devices
-
-
-MARCAS:
-
-http://localhost:8080/admin/brands
-
-
-COMENTARIOS:
-
-http://localhost:8080/admin/comments
-
-
-TIPOS DE DISPOSITIVOS:
-
-http://localhost:8080/admin/device-types
-
-
-AUTORES:
-
-http://localhost:8080/admin/authors
-
-
-INICIO DE SESIÓN:
-
-http://localhost:8080/login
-
-
-API JSON:
-
-http://localhost:8080/api/devices/json
-
-
-API XML:
-
-http://localhost:8080/api/devices/xml
-
-
-13. ESTRUCTURA GENERAL DEL PROYECTO
-
-AA2_Gutierrez_Esneider_Julian_CRUD/
-│
-├── BD/
-│   ├── Modelo_Entidad_Relacion_SmartTech.pdf
-│   └── smarttech_db_backup.backup
-│
+AA2_Gutierrez_Esneider_Julian_API_REST/
+|
 ├── database/
-│   ├── 01_schema.sql
-│   ├── 02_seed.sql
-│   ├── 03_backup_smarttech_db.sql
-│   ├── 04_backup_smarttech_crud.backup
-│   └── 05_normalizacion.sql
-│
-├── docs/
-│   ├── arquitectura
-│   ├── modelo_entidad_relacion.mmd
-│   └── documentación académica
+│   ├── 01_schema
+│   ├── 02_seed
+│   ├── 03_normalizacion
+│   ├── smarttech_db_backup_AA2.backup
+│   └── 04_backup_smarttech_api_rest.sql
 │
 ├── src/
 │   └── main/
@@ -426,84 +256,332 @@ AA2_Gutierrez_Esneider_Julian_CRUD/
 │       │
 │       └── resources/
 │           ├── static/
-│           │   └── css/
-│           │       └── styles.css
-│           │
 │           ├── templates/
-│           │   ├── admin-brands.html
-│           │   ├── admin-comments.html
-│           │   ├── admin-devices.html
-│           │   ├── admin-device-types.html
-│           │   ├── admin-authors.html
-│           │   ├── comment-form.html
-│           │   ├── detail.html
-│           │   ├── device-form.html
-│           │   ├── device-type-form.html
-│           │   ├── author-form.html
-│           │   ├── index.html
-│           │   └── login.html
-│           │
 │           └── application.properties
 │
-├── .gitignore
 ├── pom.xml
 ├── README.md
 └── readme.txt
 
+8. BASE DE DATOS
 
-14. BASE DE DATOS
+La aplicación utiliza PostgreSQL como sistema gestor de base de datos.
 
-El proyecto incluye archivos para facilitar la creación, carga,
-migración y restauración de la base de datos.
+Nombre de la base de datos:
 
+smarttech_db
 
-En la carpeta database se encuentran:
+Las principales tablas utilizadas por la aplicación son:
 
+* devices
+* brands
+* device_types
+* comments
+* authors
+* admin_users
 
-- 01_schema.sql:
-  contiene la estructura final de las tablas de la base de datos.
+RELACIONES PRINCIPALES
 
+* devices.brand_id -> brands.id
+* devices.type_id -> device_types.id
+* comments.device_id -> devices.id
+* comments.author_id -> authors.id
 
-- 02_seed.sql:
-  contiene datos iniciales para la aplicación.
+La estructura de la base de datos se encuentra normalizada para evitar
+la duplicación innecesaria de información y utilizar relaciones mediante
+claves foráneas.
 
+9. ARCHIVOS DE BASE DE DATOS
 
-- 03_backup_smarttech_db.sql:
-  respaldo correspondiente a la primera actividad y a la estructura
-  anterior del proyecto.
+La carpeta database contiene los archivos relacionados con la creación,
+carga, normalización y respaldo de la base de datos.
 
+01_schema:
+Contiene la estructura inicial de las tablas.
 
-- 04_backup_smarttech_crud.backup:
-  respaldo actualizado correspondiente a la versión CRUD de esta
-  actividad.
+02_seed:
+Contiene datos iniciales para la aplicación.
 
+03_normalizacion:
+Contiene los cambios realizados para normalizar la estructura de la
+base de datos.
 
-- 05_normalizacion.sql:
-  script de migración utilizado para normalizar los campos type y
-  author, crear las tablas device_types y authors y establecer las
-  relaciones mediante claves foráneas.
+smarttech_db_backup_AA2.backup:
+Corresponde al respaldo anterior de la base de datos y se conserva como
+parte de los archivos heredados del proyecto.
 
+04_backup_smarttech_api_rest.sql:
+Corresponde al respaldo actualizado de la base de datos utilizado para
+la presente actividad de API REST.
 
-La carpeta BD conserva documentación relacionada con la base de datos
-del proyecto anterior:
+10. CONFIGURACIÓN DE LA BASE DE DATOS
 
-- Modelo_Entidad_Relacion_SmartTech.pdf
-- smarttech_db_backup.backup
+Crear una base de datos PostgreSQL denominada:
 
+smarttech_db
 
-El archivo 04_backup_smarttech_crud.backup corresponde al respaldo
-actualizado de la base de datos utilizado para esta actividad.
+La aplicación puede utilizar las siguientes variables de entorno:
 
+PGHOST
+PGPORT
+PGDATABASE
+PGUSER
+PGPASSWORD
 
-15. CONSIDERACIONES
+Configuración local:
 
-- Las credenciales del administrador no se incluyen en el proyecto.
-- Las credenciales deben configurarse mediante variables de entorno.
-- Las imágenes de los dispositivos utilizan URLs externas almacenadas
-  en la base de datos.
-- El archivo 03_backup_smarttech_db.sql se conserva como respaldo
-  histórico de la primera actividad.
-- El archivo 04_backup_smarttech_crud.backup corresponde a la estructura
-  y datos actuales de la versión CRUD.
-- El archivo 05_normalizacion.sql corresponde a la migración utilizada
-  para normalizar la base de datos existente.
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=smarttech_db
+PGUSER=postgres
+
+La variable PGPASSWORD debe contener la contraseña configurada
+localmente para el usuario de PostgreSQL.
+
+11. CONFIGURACIÓN DEL ADMINISTRADOR
+
+La aplicación utiliza variables de entorno para configurar el usuario
+administrador cuando se requiere personalizar las credenciales.
+
+Variables:
+
+SMARTTECH_ADMIN_USERNAME
+SMARTTECH_ADMIN_EMAIL
+SMARTTECH_ADMIN_PASSWORD
+
+Si estas variables no están definidas en el entorno local, la aplicación
+utiliza valores predeterminados para permitir la ejecución local.
+
+Las contraseñas son almacenadas utilizando BCrypt.
+
+No se deben incluir credenciales reales dentro del repositorio o del
+archivo README.
+
+12. TECNOLOGÍAS UTILIZADAS
+
+Lenguaje:
+
+* Java 17 o superior.
+
+Framework:
+
+* Spring Boot 3.5.4
+* Spring MVC
+* Spring Security
+* Spring Data JPA
+
+Persistencia:
+
+* PostgreSQL
+
+Motor de plantillas:
+
+* Thymeleaf
+
+Interfaz:
+
+* HTML5
+* CSS3
+* Bootstrap
+
+Formato de intercambio:
+
+* JSON
+
+Gestión del proyecto:
+
+* Maven
+
+Pruebas de API:
+
+* Postman
+
+Administración de base de datos:
+
+* pgAdmin
+
+Entorno de desarrollo:
+
+* Visual Studio Code
+
+13. REQUISITOS
+
+Para ejecutar el proyecto se requiere:
+
+* Java JDK 17 o superior.
+* PostgreSQL.
+* Visual Studio Code u otro IDE compatible.
+* Postman para realizar las pruebas de la API.
+
+El proyecto utiliza Maven y cuenta con Maven Wrapper.
+
+14. EJECUCIÓN DEL PROYECTO
+
+Desde la carpeta raíz del proyecto ejecutar en Windows:
+
+.\mvnw.cmd spring-boot:run
+
+También se puede ejecutar mediante Maven desde el entorno de desarrollo.
+
+La aplicación estará disponible en:
+
+http://localhost:8080
+
+15. PRUEBAS REALIZADAS CON POSTMAN
+
+La API REST fue probada utilizando Postman.
+
+PRUEBA 1 - GET TODOS
+
+Método:
+GET
+
+URL:
+http://localhost:8080/api/devices
+
+Resultado:
+HTTP 200 OK
+
+Se obtuvo la lista de dispositivos registrados en la base de datos en
+formato JSON.
+
+PRUEBA 2 - GET POR ID
+
+Método:
+GET
+
+URL:
+http://localhost:8080/api/devices/1
+
+Resultado:
+HTTP 200 OK
+
+Se obtuvo correctamente la información del dispositivo solicitado.
+
+PRUEBA 3 - POST
+
+Método:
+POST
+
+URL:
+http://localhost:8080/api/devices
+
+Resultado:
+HTTP 201 Created
+
+Se creó correctamente un nuevo dispositivo mediante una solicitud JSON.
+
+PRUEBA 4 - PUT
+
+Método:
+PUT
+
+URL:
+http://localhost:8080/api/devices/5
+
+Resultado:
+HTTP 200 OK
+
+Se actualizó correctamente la información del dispositivo creado.
+
+PRUEBA 5 - DELETE
+
+Método:
+DELETE
+
+URL:
+http://localhost:8080/api/devices/8
+
+Resultado:
+HTTP 204 No Content
+
+El dispositivo fue eliminado correctamente.
+
+PRUEBA 6 - VERIFICACIÓN DEL DELETE
+
+Método:
+GET
+
+URL:
+http://localhost:8080/api/devices/8
+
+Resultado:
+HTTP 404 Not Found
+
+La respuesta confirmó que el dispositivo eliminado ya no se encontraba
+registrado en la base de datos.
+
+16. CONTROL DE ERRORES
+
+La API utiliza respuestas HTTP para informar el resultado de las
+operaciones.
+
+Principales códigos utilizados:
+
+200 OK:
+La solicitud fue procesada correctamente.
+
+201 Created:
+El recurso fue creado correctamente.
+
+204 No Content:
+El recurso fue eliminado correctamente y no se devuelve contenido en la
+respuesta.
+
+404 Not Found:
+El recurso solicitado no existe.
+
+Las respuestas de error incluyen información que permite identificar
+el problema y el recurso solicitado.
+
+17. SEGURIDAD
+
+La aplicación utiliza Spring Security para proteger el módulo
+administrativo.
+
+Las rutas de la API REST utilizadas en esta actividad se encuentran
+habilitadas para permitir las pruebas mediante Postman.
+
+El acceso administrativo utiliza autenticación y rol ADMIN.
+
+Las contraseñas se almacenan utilizando BCrypt.
+
+18. EVIDENCIAS
+
+La entrega incluye evidencias de las pruebas realizadas mediante
+Postman correspondientes a:
+
+* GET de todos los dispositivos.
+* GET de un dispositivo por ID.
+* POST para crear un dispositivo.
+* PUT para actualizar un dispositivo.
+* DELETE para eliminar un dispositivo.
+* GET posterior al DELETE para verificar la respuesta 404.
+
+Las evidencias permiten demostrar el funcionamiento de los métodos HTTP
+implementados en la API REST.
+
+19. CONSIDERACIONES FINALES
+
+El proyecto SmartTech integra una aplicación web con una API REST
+desarrollada mediante Spring Boot, Spring Data JPA y PostgreSQL.
+
+La API permite transferir información entre el cliente y la base de
+datos mediante solicitudes HTTP y objetos JSON.
+
+La implementación de los métodos GET, POST, PUT y DELETE permite
+realizar las principales operaciones CRUD sobre la entidad Device.
+
+Las pruebas realizadas mediante Postman permitieron verificar el
+funcionamiento de cada operación y comprobar el manejo de recursos no
+existentes mediante respuestas HTTP.
+
+El respaldo actualizado de la base de datos se encuentra en:
+
+database/04_backup_smarttech_api_rest.sql
+
+El respaldo anterior:
+
+database/smarttech_db_backup_AA2.backup
+
+se conserva como archivo heredado del proyecto.
